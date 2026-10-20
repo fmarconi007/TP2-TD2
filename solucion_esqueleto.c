@@ -80,7 +80,8 @@ GameBoard* game_board = NULL;
 
 char* strDuplicate(char* src) {
     // EN PROCESO
-    
+    // TODO: Contar los caracteres de src, reservar con malloc (no olvidar el '\0'),
+    //       copiar todo y devolver el puntero nuevo.
     char x;
     int cont = 0; // Contador para el tamano del string y luego sera utilizado como el size de la copia
 
@@ -95,15 +96,80 @@ char* strDuplicate(char* src) {
         copia[i] = src[i];
     }
     copia[cont] = '\0';
-    // TODO: Contar los caracteres de src, reservar con malloc (no olvidar el '\0'),
-    //       copiar todo y devolver el puntero nuevo.
+
     return *copia;
 }
 
 int strCompare(char* s1, char* s2) {
+    // EN PROCESO
     // TODO: Devolver 0 si son iguales, 1 si s1 < s2, -1 si s1 > s2.
     //       Ojo: es la convencion INVERSA a strcmp.
-    return 0;
+    
+    char x;
+    int cont1 = 0;
+    int cont2 = 0;
+
+    while (x != '\0') {
+        x = s1[cont1];
+        cont1++;
+    }
+
+    while (x != '\0') {
+        x = s2[cont2];
+        cont2++;
+    }
+
+    // comparar longitudes, si uno es mas grande que otro devolver 1
+    if (cont1 < cont2){
+        return 1;
+    }
+
+    // comparaciones si tienen la misma longitud
+    int igual = 1;
+    int i = 0;
+    while (igual && i<=cont1){
+        if (s1[i] >= s2[i]){
+            if (s1[i] != s2[i]){ 
+                igual = 0;
+                return -1; // distintos, por lo tanto s1 > s2
+            }
+            else:{
+                i++; // iguales, siguiente caracter
+            }
+        }
+        else{ // s1 < s2
+            igual = 0;
+            return 1;
+        }
+        
+    }
+
+    return 0; // no encuentra diferencias, sale del while por superar la longitud, por descarte s1 = s2
+
+    int i =0;
+
+    // Recorrer ambos mientras tengan caracteres y sean iguales
+    while (s1[i] != '\0' && s2[i] != '\0'){
+        // Comparaciones, terminan si son diferentes
+        if (s1[i] < s2[i]){
+            return 1;
+        }
+        if (s1[i] > s2[i]){
+            return -1;
+        }
+        i++; // El caracter es igual, pasa al siguiente
+    }
+    
+    if (s1[i] == '\0' && s2[i] == '\0'){
+        return 0; // Al finalizar el while, si ambos estan al final de la cadena, son iguales
+    }
+    if (s1[i] == '\0'){
+        return 1; // s1 < s2 (s1 termina antes)
+    }
+    else{
+        return -1; // s2 < s1 (s2 termina antes)
+    }
+
 }
 
 char* strConcatenate(char* src1, char* src2) {
