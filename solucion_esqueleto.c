@@ -79,7 +79,6 @@ GameBoard* game_board = NULL;
 // ========= EJERCICIO 1: STRINGS (NO USAR string.h) =========
 
 char* strDuplicate(char* src) {
-    // EN PROCESO
     // TODO: Contar los caracteres de src, reservar con malloc (no olvidar el '\0'),
     //       copiar todo y devolver el puntero nuevo.
     char x;
@@ -101,7 +100,6 @@ char* strDuplicate(char* src) {
 }
 
 int strCompare(char* s1, char* s2) {
-    // EN PROCESO
     // TODO: Devolver 0 si son iguales, 1 si s1 < s2, -1 si s1 > s2.
     //       Ojo: es la convencion INVERSA a strcmp.
     
