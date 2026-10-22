@@ -89,7 +89,7 @@ char* strDuplicate(char* src) {
         cont++;
     }
 
-    char* copia = (char*)malloc(sizeof(char) * (cont+1));
+    char* copia = (char*)malloc(sizeof(char) * (cont)); // cont ya incluye el ulitmo caracter '\0'
 
     for (int i = 0; i<cont; i++){
         copia[i] = src[i];
@@ -112,6 +112,7 @@ int strCompare(char* s1, char* s2) {
         cont1++;
     }
 
+    x = 0;
     while (x != '\0') {
         x = s2[cont2];
         cont2++;
@@ -144,7 +145,7 @@ int strCompare(char* s1, char* s2) {
 
     return 0; // no encuentra diferencias, sale del while por superar la longitud, por descarte s1 = s2
 
-    int i =0;
+    int i =0 ;
 
     // Recorrer ambos mientras tengan caracteres y sean iguales
     while (s1[i] != '\0' && s2[i] != '\0'){
@@ -177,30 +178,32 @@ char* strConcatenate(char* src1, char* src2) {
     int size1 = 0;
     int size2 = 0;
 
-    src1 = strDuplicate(src1);
+    src1 = strDuplicate(src1); // copias de los string solicitando memoria para liberarlos correctamente
     src2 = strDuplicate(src2);
 
+    // contadores para el tamano de cada string y solicitar memoria para el nuevo string
     while (x != '\0') {
         x = src1[size1];
         size1++;
-    } // Revisar si sale incluyendo el ultimo! importante para el uso de strDuplicate
+    }
+    size1--; // saca del contador a '\0'
 
     while (x != '\0') {
         x = src2[size2];
         size2++;
     }
 
-    char* nuevo = (char*)malloc(sizeof(char) * (size1+size2+1)); // los tamanos de los dos strings y el ultimo caracter \0
+    char* nuevo = (char*)malloc(sizeof(char) * (size1+size2)); // los tamanos de los dos strings
 
     int i = 0;
-    while (i<size){
+    while (i<=size){ // recorre el primer string
         nuevo[i] = src1[i];
         i++;
     }
     free(src1);
 
     int j = 0;
-    while (j<size2){
+    while (j<size2){ // a partir de i (que queda en la ultima posicion de src1), recorre el segundo string
         nuevo[i] = src2[j];
         i++;
         j++
@@ -210,7 +213,6 @@ char* strConcatenate(char* src1, char* src2) {
     nuevo[size1+size2] = '\0'
 
     return nuevo;
-
 }
 
 // ========= EJERCICIO 2: FUNCIONES A IMPLEMENTAR (EL TP) =========
