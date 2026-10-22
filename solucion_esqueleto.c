@@ -140,7 +140,6 @@ int strCompare(char* s1, char* s2) {
             igual = 0;
             return 1;
         }
-        
     }
 
     return 0; // no encuentra diferencias, sale del while por superar la longitud, por descarte s1 = s2
