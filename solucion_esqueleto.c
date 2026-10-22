@@ -179,10 +179,13 @@ char* strConcatenate(char* src1, char* src2) {
     int size1 = 0;
     int size2 = 0;
 
+    src1 = strDuplicate(src1);
+    src2 = strDuplicate(src2);
+
     while (x != '\0') {
         x = src1[size1];
         size1++;
-    }
+    } // Revisar si sale incluyendo el ultimo! importante para el uso de strDuplicate
 
     while (x != '\0') {
         x = src2[size2];
