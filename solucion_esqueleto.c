@@ -169,18 +169,47 @@ int strCompare(char* s1, char* s2) {
     else{
         return -1; // s2 < s1 (s2 termina antes)
     }
-
 }
 
 char* strConcatenate(char* src1, char* src2) {
     // TODO: Reservar un string nuevo con src1 seguido de src2, y liberar src1 y src2.
     //       Precondicion: src1 y src2 vienen de malloc y son punteros distintos.
 
-    char* s1 = strDuplicate(src1);
-    char* s2 = strDuplicate(src2);
+    char x;
+    int size1 = 0;
+    int size2 = 0;
 
+    while (x != '\0') {
+        x = src1[size1];
+        size1++;
+    }
+
+    while (x != '\0') {
+        x = src2[size2];
+        size2++;
+    }
+
+    char* nuevo = (char*)malloc(sizeof(char) * (size1+size2+1)); // los tamanos de los dos strings y el ultimo caracter \0
+
+    int i = 0;
+    while (i<size){
+        nuevo[i] = src1[i];
+        i++;
+    }
     free(src1);
+
+    int j = 0;
+    while (j<size2){
+        nuevo[i] = src2[j];
+        i++;
+        j++
+    }
     free(src2);
+
+    nuevo[size1+size2] = '\0'
+
+    return nuevo;
+
 }
 
 // ========= EJERCICIO 2: FUNCIONES A IMPLEMENTAR (EL TP) =========
