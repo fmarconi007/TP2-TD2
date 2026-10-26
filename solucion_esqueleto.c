@@ -79,25 +79,9 @@ GameBoard* game_board = NULL;
 // ========= EJERCICIO 1: STRINGS (NO USAR string.h) =========
 
 char* strDuplicate(char* src) {
-    // EN PROCESO
-    
-    char x;
-    int cont = 0; // Contador para el tamano del string y luego sera utilizado como el size de la copia
-
-    while (x != '\0') {
-        x = src[cont];
-        cont++;
-    }
-
-    char* copia = (char*)malloc(sizeof(char) * (cont+1));
-
-    for (int i = 0; i<cont; i++){
-        copia[i] = src[i];
-    }
-    copia[cont] = '\0';
     // TODO: Contar los caracteres de src, reservar con malloc (no olvidar el '\0'),
     //       copiar todo y devolver el puntero nuevo.
-    return *copia;
+    return NULL;
 }
 
 int strCompare(char* s1, char* s2) {
