@@ -186,6 +186,16 @@ char* strConcatenate(char* src1, char* src2) {
 
 GameBoard* gameBoardNew() {
     // TODO: Reservar memoria para el GameBoard.
+    GameBoard* board = malloc(sizeof(Gameboard));
+
+    board->first_row = NULL;
+    board->queue_head = NULL;
+    board->queue_tail = NULL;
+    board->first_particle = NULL;
+    // COMO HAGO SIN PIEZA ACTIVA??????
+    board->score = 0;
+    board->tick_timer = 0;
+
     // TODO: Usar un bucle para hacer malloc de las 20 filas (RowNode) y conectarlas.
     // TODO: El puntero first_row debe apuntar al primero de esos nodos.
     // TODO: Inicializar queue_head, queue_tail y first_particle en NULL.
