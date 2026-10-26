@@ -192,11 +192,17 @@ GameBoard* gameBoardNew() {
 
     GameBoard* board = malloc(sizeof(Gameboard));
     RowNode* fila = (RowNode*)malloc(sizeof(RowNode)); // Pide memoria para el primer nodo
+    
+    fila->cell = 0;
+    RowNode** actual = fila;
     for (int i = 0; i<20; i++){
-        
+        RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode*));
+        nuevo->cell = 0;
+        actual->next = nuevo;
+        actual = nuevo;
     }
-
-    board->first_row = NULL; // Flecha y no '=' porque son punteros
+    board->first_row = actual; // asigna la primera fila a la cabeza
+     
     board->queue_head = NULL;
     board->queue_tail = NULL;
     board->first_particle = NULL;
