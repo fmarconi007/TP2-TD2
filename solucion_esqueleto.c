@@ -81,135 +81,103 @@ GameBoard* game_board = NULL;
 char* strDuplicate(char* src) {
     // TODO: Contar los caracteres de src, reservar con malloc (no olvidar el '\0'),
     //       copiar todo y devolver el puntero nuevo.
-    char x;
-    int cont = 0; // Contador para el tamano del string y luego sera utilizado como el size de la copia
+    
+    int cont = len(src);
 
-    while (x != '\0') {
-        x = src[cont];
-        cont++;
+    char* copia = (char*)malloc(sizeof(char) * (cont+1));
+
+    if (copia == NULL){ 
+        return NULL;
     }
-
-    char* copia = (char*)malloc(sizeof(char) * (cont)); // cont ya incluye el ulitmo caracter '\0'
 
     for (int i = 0; i<cont; i++){
         copia[i] = src[i];
     }
     copia[cont] = '\0';
 
-    return *copia;
+    return copia;
 }
 
 int strCompare(char* s1, char* s2) {
     // TODO: Devolver 0 si son iguales, 1 si s1 < s2, -1 si s1 > s2.
     //       Ojo: es la convencion INVERSA a strcmp.
     
-    char x;
-    int cont1 = 0;
-    int cont2 = 0;
-
-    while (x != '\0') {
-        x = s1[cont1];
-        cont1++;
-    }
-
-    x = 0;
-    while (x != '\0') {
-        x = s2[cont2];
-        cont2++;
-    }
+    int cont1 = len(s1);
+    int cont2 = len(s2);
 
     // comparar longitudes, si uno es mas grande que otro devolver 1
     if (cont1 < cont2){
         return 1;
     }
 
-    // comparaciones si tienen la misma longitud
+    // Recorrer ambos mientras tengan caracteres
     int igual = 1;
     int i = 0;
-    while (igual && i<=cont1){
-        if (s1[i] >= s2[i]){
-            if (s1[i] != s2[i]){ 
-                igual = 0;
-                return -1; // distintos, por lo tanto s1 > s2
-            }
-            else:{
-                i++; // iguales, siguiente caracter
-            }
-        }
-        else{ // s1 < s2
-            igual = 0;
-            return 1;
-        }
-    }
-
-    return 0; // no encuentra diferencias, sale del while por superar la longitud, por descarte s1 = s2
-
-    int i =0 ;
-
-    // Recorrer ambos mientras tengan caracteres y sean iguales
     while (s1[i] != '\0' && s2[i] != '\0'){
-        // Comparaciones, terminan si son diferentes
         if (s1[i] < s2[i]){
             return 1;
         }
-        if (s1[i] > s2[i]){
+       if (s1[i] > s2[i]){
             return -1;
-        }
-        i++; // El caracter es igual, pasa al siguiente
+       }
+
+       i++;
     }
-    
+
+    // Si los dos terminaron al mismo tiempo, son iguales
     if (s1[i] == '\0' && s2[i] == '\0'){
-        return 0; // Al finalizar el while, si ambos estan al final de la cadena, son iguales
+        return 0;
     }
+
+    // Si alguino termino el ciclo antes
     if (s1[i] == '\0'){
-        return 1; // s1 < s2 (s1 termina antes)
+        return 0;
     }
     else{
-        return -1; // s2 < s1 (s2 termina antes)
+        return -1;
     }
+}
+
+int len(char* arr){
+    // calcula la longitud de un string sin incluir '\0'
+    
+    char x;
+    int cont = 0; // Contador final para el tamano del string
+
+    while (x != '\0') {
+        x = arr[cont];
+        cont++;
+    }
+
+    return cont;
 }
 
 char* strConcatenate(char* src1, char* src2) {
     // TODO: Reservar un string nuevo con src1 seguido de src2, y liberar src1 y src2.
     //       Precondicion: src1 y src2 vienen de malloc y son punteros distintos.
 
-    char x;
-    int size1 = 0;
-    int size2 = 0;
-
-    src1 = strDuplicate(src1); // copias de los string solicitando memoria para liberarlos correctamente
-    src2 = strDuplicate(src2);
-
-    // contadores para el tamano de cada string y solicitar memoria para el nuevo string
-    while (x != '\0') {
-        x = src1[size1];
-        size1++;
-    }
-    size1--; // saca del contador a '\0'
-
-    while (x != '\0') {
-        x = src2[size2];
-        size2++;
-    }
-
-    char* nuevo = (char*)malloc(sizeof(char) * (size1+size2)); // los tamanos de los dos strings
+    // Contadores para el tamano de cada string y solicitar memoria para el nuevo
+    int size1 = len(src1);
+    int size2 = len(src2); 
+    
+    char* nuevo = (char*)malloc(sizeof(char) * (size1 + size2 + 1)); // los tamanos de los dos strings + '\0'
 
     int i = 0;
-    while (i<=size){ // recorre el primer string
+    while (i < size1){ // recorre el primer string
         nuevo[i] = src1[i];
         i++;
     }
-    free(src1);
+    free(src1); // Libera primer string
 
     int j = 0;
-    while (j<size2){ // a partir de i (que queda en la ultima posicion de src1), recorre el segundo string
+    while (j < size2){ // a partir de i (que queda en la ultima posicion de src1), recorre el segundo string
         nuevo[i] = src2[j];
         i++;
-        j++
+        j++;
     }
-    free(src2);
+    free(src2); // Libera elsegundo
 
-    nuevo[size1+size2] = '\0'
+    nuevo[size1+size2] = '\0';
 
     return nuevo;
 }
