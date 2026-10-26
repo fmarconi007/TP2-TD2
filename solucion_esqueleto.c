@@ -188,7 +188,7 @@ GameBoard* gameBoardNew() {
     // TODO: Reservar memoria para el GameBoard.
     GameBoard* board = malloc(sizeof(Gameboard));
 
-    board->first_row = NULL;
+    board->first_row = NULL; // Flecha y no '=' porque son punteros
     board->queue_head = NULL;
     board->queue_tail = NULL;
     board->first_particle = NULL;
@@ -197,6 +197,8 @@ GameBoard* gameBoardNew() {
     board->tick_timer = 0;
 
     // TODO: Usar un bucle para hacer malloc de las 20 filas (RowNode) y conectarlas.
+
+    
     // TODO: El puntero first_row debe apuntar al primero de esos nodos.
     // TODO: Inicializar queue_head, queue_tail y first_particle en NULL.
     printf("Función gameBoardNew no implementada.\n");
