@@ -186,7 +186,15 @@ char* strConcatenate(char* src1, char* src2) {
 
 GameBoard* gameBoardNew() {
     // TODO: Reservar memoria para el GameBoard.
+    // TODO: Usar un bucle para hacer malloc de las 20 filas (RowNode) y conectarlas.
+    // TODO: El puntero first_row debe apuntar al primero de esos nodos.
+    // TODO: Inicializar queue_head, queue_tail y first_particle en NULL.
+
     GameBoard* board = malloc(sizeof(Gameboard));
+    RowNode* fila = (RowNode*)malloc(sizeof(RowNode)); // Pide memoria para el primer nodo
+    for (int i = 0; i<20; i++){
+        
+    }
 
     board->first_row = NULL; // Flecha y no '=' porque son punteros
     board->queue_head = NULL;
@@ -196,11 +204,7 @@ GameBoard* gameBoardNew() {
     board->score = 0;
     board->tick_timer = 0;
 
-    // TODO: Usar un bucle para hacer malloc de las 20 filas (RowNode) y conectarlas.
-
     
-    // TODO: El puntero first_row debe apuntar al primero de esos nodos.
-    // TODO: Inicializar queue_head, queue_tail y first_particle en NULL.
     printf("Función gameBoardNew no implementada.\n");
     return NULL;
 }
