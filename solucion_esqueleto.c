@@ -218,7 +218,7 @@ GameBoard* gameBoardNew() {
     board->queue_tail = NULL;
     board->first_particle = NULL;
     
-    board->current_piece.active = 0;
+    board->current_piece.active = 0; // pieza inactiva
     
     board->score = 0;
     board->tick_timer = 0;
@@ -275,24 +275,32 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
     RowNode* sig = board->next;
 
     int llena = 1; // Sera 0 si hay un hueco en la fila
+    int eliminadas = 0;
 
     while (sig != NULL){
-        for (int j=0; j<GRID_COLS; i++){
-            if (sig->cells[j] = 0){
+        for (int j=0; j<GRID_COLS; j++){
+            
+            if (actual->cells[j] = 0){
                 llena = 0;
                 break;
             }
             if (llena == 1){
+                llena = 1;
                 // La fila esta llena, hay que eliminarla y crear una nueva fila vacia
-                // Generar particula
+                // Generar particula QUE ES X,Y?????
+                antes->next = sig; // Enlaza la fila anterior con la siguiente, eliminando la actual
+                free(actual); // Libera la fila llena
 
                 RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode)); // Fila a adjuntar
-
-
+                board->first_row = nuevo;
+                eliminadas++;
             }
         }
+        antes = actual;
+        actual = sig;
+        sig = sig->next;
     }
-    return 0;
+    return eliminadas;
 }
 
 void gameBoardEnqueuePiece(GameBoard* board, int type) {
