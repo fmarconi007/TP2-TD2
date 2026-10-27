@@ -152,6 +152,7 @@ char* strConcatenate(char* src1, char* src2) {
     int size2 = len(src2); 
     
     char* nuevo = (char*)malloc(sizeof(char) * (size1 + size2 + 1)); // los tamanos de los dos strings + '\0'
+    if (nuevo == NULL) return NULL;
 
     int i = 0;
     while (i < size1){ // recorre el primer string
@@ -181,29 +182,49 @@ GameBoard* gameBoardNew() {
     // TODO: El puntero first_row debe apuntar al primero de esos nodos.
     // TODO: Inicializar queue_head, queue_tail y first_particle en NULL.
 
-    
+    GameBoard* board = (GameBoard*)malloc(sizeof(GameBoard)); // Pide memoria para el tablero
+    if (board == NULL){
+        gameBoardDelete(board);
+        return NULL;
+    }
+
     RowNode* fila = (RowNode*)malloc(sizeof(RowNode)); // Pide memoria para el primer nodo
-    
-    fila->cells[] = 0;
-    RowNode** actual = fila;
-    for (int i = 0; i<20; i++){
-        RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode*));
-        nuevo->cell = 0;
-        actual->next = nuevo;
+    if (fila == NULL){
+        gameBoardDelete(board);
+        return NULL;
+    }
+
+    cellsEn0(fila->cells); // Inicializa la primera fila en 0
+    RowNode* actual = fila;
+    for (int i = 1; i<20; i++){
+        RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode)); // Pide memoria para el siguiente nodo
+        if (nuevo == NULL){
+            gameBoardDelete(board);
+            return NULL;
+        } // Cada vez que se crea un nodo nuevo revisa se le asigno un espacio de memoria
+
+        cellsEn0(nuevo->cells);
+        actual->next = nuevo; 
         actual = nuevo;
     }
 
-    GameBoard* board = (GamerBoard*)malloc(sizeof(Gameboard*));
-    board->first_row = actual; // asigna la primera fila a la cabeza
-     
+    board->first_row = fila; // Asigna el primer nodo creado
     board->queue_head = NULL;
     board->queue_tail = NULL;
     board->first_particle = NULL;
-    // COMO HAGO SIN PIEZA ACTIVA??????
+    
+    // COMO HAGO SIN PIEZA ACTIVA?????? seria iniciar los valores de ese struct en 0? o no iniciarlo?
+    
     board->score = 0;
     board->tick_timer = 0;
     
     return board;
+}
+
+void cellsEn0(int cells[]){
+    for (int i = 0; i < GRID_COLS; i++){
+        cells[i] = 0;
+    }
 }
 
 void gameBoardDelete(GameBoard* board) {
@@ -227,7 +248,6 @@ void gameBoardDelete(GameBoard* board) {
         free(actual);
         sig = sig->next;
     }
-
 }
 
 void gameBoardAddParticle(GameBoard* board, float x, float y, int color) {
