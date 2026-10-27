@@ -182,26 +182,31 @@ GameBoard* gameBoardNew() {
     // TODO: El puntero first_row debe apuntar al primero de esos nodos.
     // TODO: Inicializar queue_head, queue_tail y first_particle en NULL.
 
+    int contF = 0;
+
     GameBoard* board = (GameBoard*)malloc(sizeof(GameBoard)); // Pide memoria para el tablero
-    if (board == NULL){
-        gameBoardDelete(board);
-        return NULL;
-    }
+    if (board == NULL) return NULL;
 
     RowNode* fila = (RowNode*)malloc(sizeof(RowNode)); // Pide memoria para el primer nodo
     if (fila == NULL){
-        gameBoardDelete(board);
+        free(board);
         return NULL;
     }
-
+    contF++;
     cellsEn0(fila->cells); // Inicializa la primera fila en 0
     RowNode* actual = fila;
-    for (int i = 1; i<20; i++){
+
+    for (int i = 1; i < 20; i++){
         RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode)); // Pide memoria para el siguiente nodo
         if (nuevo == NULL){
-            gameBoardDelete(board);
+            for (int F = 0; F < contF; F++){
+                RowNode* sig = fila->next;
+                free(fila);
+                fila = sig; // Recorre desde la primera fila hasta la ultima que fue contada
+            }
+            free(board);
             return NULL;
-        } // Cada vez que se crea un nodo nuevo revisa se le asigno un espacio de memoria
+        } // Cada vez que se crea un nodo nuevo revisa si le asigno un espacio de memoria, sino libera todo
 
         cellsEn0(nuevo->cells);
         actual->next = nuevo; 
@@ -213,7 +218,7 @@ GameBoard* gameBoardNew() {
     board->queue_tail = NULL;
     board->first_particle = NULL;
     
-    // COMO HAGO SIN PIEZA ACTIVA?????? seria iniciar los valores de ese struct en 0? o no iniciarlo?
+    board->current_piece.active = 0;
     
     board->score = 0;
     board->tick_timer = 0;
@@ -222,6 +227,7 @@ GameBoard* gameBoardNew() {
 }
 
 void cellsEn0(int cells[]){
+    // Funcion auxiliar para inicializar todas las celdas de una fila en 0
     for (int i = 0; i < GRID_COLS; i++){
         cells[i] = 0;
     }
@@ -263,7 +269,29 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
     // TODO: Crear un nuevo RowNode vacío (lleno de ceros).
     // TODO: Insertar el nuevo RowNode en la CABEZA del tablero (board->first_row).
     // TODO: Por cada celda destruida, invocar a gameBoardAddParticle().
-    printf("Función gameBoardCheckAndClearLines no implementada.\n");
+    
+    RowNode* actual = board;
+    RowNode* antes = NULL;
+    RowNode* sig = board->next;
+
+    int llena = 1; // Sera 0 si hay un hueco en la fila
+
+    while (sig != NULL){
+        for (int j=0; j<GRID_COLS; i++){
+            if (sig->cells[j] = 0){
+                llena = 0;
+                break;
+            }
+            if (llena == 1){
+                // La fila esta llena, hay que eliminarla y crear una nueva fila vacia
+                // Generar particula
+
+                RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode)); // Fila a adjuntar
+
+
+            }
+        }
+    }
     return 0;
 }
 
