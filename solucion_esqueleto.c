@@ -301,7 +301,7 @@ void gameBoardEnqueuePiece(GameBoard* board, int type) {
     PieceQueueNode* nuevo = (PieceQueueNode*)malloc(sizeof(PieceQueueNode));
     nuevo->type = type;
     nuevo->next = null;
-    (board.queue_tail)->next = nuevo;
+    (board->queue_tail)->next = nuevo;
     board.queue_tail = nuevo;
 }
 
