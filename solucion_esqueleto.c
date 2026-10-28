@@ -507,7 +507,29 @@ void correrTests() {
     //    gameBoardCheckAndClearLines y comprobar que first_row es la fila nueva vacia y que
     //    la lista sigue teniendo 20 filas.
     // Liberar toda la memoria pedida en los tests (strings y tableros).
-    printf("Tests no implementados.\n");
+    
+    // strDuplicate tests
+    strDuplicate(""); // 1
+    strDuplicate("x"); // 2
+    strDuplicate("qwerty"); // 3
+    
+    // strCompare tests
+    strCompare("", ""); // 1
+    strCompare("a", "a"); // 2
+    strCompare("abc", "abd"); // 3
+    strCompare("abd", "abc"); // 4
+    
+    // strConcatenate tests
+    char* s1 = strDuplicate("");
+    char* s2 = strDuplicate("abc");
+    strConcatenate(s1, s2); // 1
+
+    char* s3 = strDuplicate("hola ");
+    char* s4 = strDuplicate("mundo");
+    strConcatenate(s3, s4); // 2 
+
+    // Tablero tests
+    
 }
 
 // Compara contra "--test" sin depender de string.h ni del Ejercicio 1.
