@@ -235,20 +235,33 @@ void gameBoardDelete(GameBoard* board) {
     // TODO: Recorrer y liberar todos los ParticleNode.
     // TODO: Finalmente, liberar la estructura GameBoard.
     
-    if (board == NULL) return NULL; // Caso base
+    f (board == NULL) return; // Caso base
 
-    // Ciclo que recorre el tablero y libera las filas de memoria
-
-    RowNode* actual = board;
-        // Si no se liberan antes los piecequeuenode y particle hay memory leak. Antes de liberar un board hay que liberarlos.
-    RowNode* sig = board->next; // Me aseguro que obtengo el segundo elemento para borrar con seguridad la cabeza
-    free(board);
-
-    for (int i = 1; i<20; i++){
-        actual = sig;
-        free(actual);
-        sig = sig->next;
+    RowNode* actual = board->first_row;
+    RowNode* siguiente = actual;
+    while (actual != NULL){
+        siguiente _= siguiente -> next;
+        free (actual);
+        actual = siguiente;
     }
+
+    PieceQueueNode* cuello = board->queue_head;
+    PieceQueueNode* cabeza = cuello;
+    while (cuello != NULL){
+        cabeza = cabeza ->next;
+        free (cuello);
+        cuello= cabeza;
+    }
+
+    ParticleNode*  particula = board->first_particle;
+    ParticleNode* particula2 = particula;
+    while (particula != NULL){
+        particula2 = particula2->next;
+        free(particula);
+        particula= particula2;
+    }
+
+    free(board);
 }
 
 void gameBoardAddParticle(GameBoard* board, float x, float y, int color) {
