@@ -282,28 +282,32 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
     RowNode* antes = NULL;
     RowNode* sig = board->next;
 
-    int llena = 1; // Sera 0 si hay un hueco en la fila
+    int llena = 0; // Sera 10 si esta llena
     int eliminadas = 0;
 
-    while (sig != NULL){
-        for (int j=0; j<GRID_COLS; j++){
+    while (sig != NULL){ // Ciclo para las filas
+        for (int j=0; j<GRID_COLS; j++){ // Ciclo para las cells
             
-            if (actual->cells[j] = 0){
-                llena = 0;
-                break;
+            if (actual->cells[j] != 0){
+                llena++;
             }
-            if (llena == 1){
-                llena = 1;
+            else{
+                break; // Encontro un 0, no esta llena y sale del for y sigue a la siguiente fila
+            }
+            if (llena == 10){
                 // La fila esta llena, hay que eliminarla y crear una nueva fila vacia
                 // Generar particula QUE ES X,Y?????
                 antes->next = sig; // Enlaza la fila anterior con la siguiente, eliminando la actual
                 free(actual); // Libera la fila llena
 
-                RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode)); // Fila a adjuntar
+                RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode)); // Crea una fila nueva
                 board->first_row = nuevo;
+                cellsEn0(nuevo->cells);
+
                 eliminadas++;
             }
         }
+        // Reemplazo a la siguiente fila
         antes = actual;
         actual = sig;
         sig = sig->next;
@@ -528,6 +532,9 @@ void correrTests() {
     char* s4 = strDuplicate("mundo");
     strConcatenate(s3, s4); // 2 
 
+    // Cola tests
+
+    
     // Tablero tests
     
 }
