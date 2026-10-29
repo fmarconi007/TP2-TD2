@@ -513,10 +513,10 @@ void correrTests() {
     // Liberar toda la memoria pedida en los tests (strings y tableros).
     
     // strDuplicate tests
-    strDuplicate(""); // 1
-    strDuplicate("x"); // 2
-    strDuplicate("qwerty"); // 3
-    
+    free(strDuplicate("")); // 1
+    free(strDuplicate("x")); // 2
+    free(strDuplicate("qwerty")); // 3
+
     // strCompare tests
     strCompare("", ""); // 1
     strCompare("a", "a"); // 2
