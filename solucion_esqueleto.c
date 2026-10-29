@@ -81,11 +81,9 @@ GameBoard* game_board = NULL;
 int len(char* arr){
     // calcula la longitud de un string sin incluir '\0'
     
-    char x=arr[0];
-    int cont = 1; // Contador final para el tamano del string
+    int cont = 0; // Contador final para el tamano del string
 
-    while (x != '\0') {
-        x = arr[cont];
+    while (arr[cont] != '\0') {
         cont++;
     }
 
@@ -114,29 +112,20 @@ int strCompare(char* s1, char* s2) {
     // TODO: Devolver 0 si son iguales, 1 si s1 < s2, -1 si s1 > s2.
     //       Ojo: es la convencion INVERSA a strcmp.
     
-    int cont1 = len(s1);
-    int cont2 = len(s2);
-
-    // comparar longitudes, si uno es mas grande que otro devolver 1
-    if (cont1 < cont2) return 1;
-
     // Recorrer ambos mientras tengan caracteres
     int i = 0;
     while (s1[i] != '\0' && s2[i] != '\0'){
         if (s1[i] < s2[i]) return 1;
         if (s1[i] > s2[i]) return -1;
-
        i++;
     }
 
     // Si los dos terminaron al mismo tiempo, son iguales
-    if (s1[i] == '\0' && s2[i] == '\0') return 0;
-
-    // Si alguino termino el ciclo antes
-    if (s1[i] == '\0'){
+    if (s1[i] == '\0' && s2[i] == '\0') {
         return 0;
-    }
-    else{
+    } else if (s1[i] == '\0'){          // Si alguno termino el ciclo antes
+        return 1;
+    } else {
         return -1;
     }
 }
