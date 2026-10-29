@@ -533,7 +533,7 @@ void correrTests() {
     strConcatenate(s3, s4); // 2 
 
     // Cola tests
-
+    
     
     // Tablero tests
     
