@@ -268,7 +268,15 @@ void gameBoardAddParticle(GameBoard* board, float x, float y, int color) {
     // TODO: Crear un ParticleNode con memoria dinámica.
     // TODO: Inicializar x, y, velocidades aleatorias y un life_timer.
     // TODO: Agregarlo al principio de la lista enlazada simple de partículas.
-    
+    ParticleNode* nuevo = (ParticleNode*)malloc(sizeof(ParticleNode));
+    nuevo->x = x;
+    nuevo->y = y;
+    nuevo->vel_x = ((rand(); % 100) / 10.0f) - 5.0f;
+    nuevo->vel_y = ((rand(); % 50) / 10.0f) - 2.0f;
+    nuevo->color = color;
+    nuevo->life_timer = 30 + (rand() % 30);
+    nuevo->next = board->first_particle;
+    board->first_particle = nuevo;
 }
 
 int gameBoardCheckAndClearLines(GameBoard* board) {
@@ -296,7 +304,7 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
             actual = actual->next;
         } else {
             for (int i = 0 ; i< 10; i++){
-                gameBoardAddParticle(board, j, i, colors[actual->cells[i]]);
+                gameBoardAddParticle(board, j, i, actual->cells[i]);
             }
             if (actual == board->first_row) {
                 RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode));
