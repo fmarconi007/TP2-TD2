@@ -91,8 +91,6 @@ int len(char* arr){
 }
 
 char* strDuplicate(char* src) {
-    // TODO: Contar los caracteres de src, reservar con malloc (no olvidar el '\0'),
-    //       copiar todo y devolver el puntero nuevo.
     
     int cont = len(src);
 
@@ -109,9 +107,7 @@ char* strDuplicate(char* src) {
 }
 
 int strCompare(char* s1, char* s2) {
-    // TODO: Devolver 0 si son iguales, 1 si s1 < s2, -1 si s1 > s2.
-    //       Ojo: es la convencion INVERSA a strcmp.
-    
+  
     // Recorrer ambos mientras tengan caracteres
     int i = 0;
     while (s1[i] != '\0' && s2[i] != '\0'){
@@ -133,9 +129,6 @@ int strCompare(char* s1, char* s2) {
 
 
 char* strConcatenate(char* src1, char* src2) {
-    // TODO: Reservar un string nuevo con src1 seguido de src2, y liberar src1 y src2.
-    //       Precondicion: src1 y src2 vienen de malloc y son punteros distintos.
-
     // Contadores para el tamano de cada string y solicitar memoria para el nuevo
 
     int size1 = len(src1);
@@ -220,11 +213,6 @@ GameBoard* gameBoardNew() {
 
 
 void gameBoardDelete(GameBoard* board) {
-    // TODO: Debe tolerar board == NULL.
-    // TODO: Recorrer y liberar todos los RowNode con free().
-    // TODO: Recorrer y liberar todos los PieceQueueNode.
-    // TODO: Recorrer y liberar todos los ParticleNode.
-    // TODO: Finalmente, liberar la estructura GameBoard.
     
     if (board == NULL) return; // Caso base
 
@@ -240,8 +228,8 @@ void gameBoardDelete(GameBoard* board) {
     PieceQueueNode* cabeza = cuello;
     while (cuello != NULL){
         cabeza = cabeza ->next;
-        free (cuello);
-        cuello= cabeza;
+        free(cuello);
+        cuello = cabeza;
     }
 
     ParticleNode*  particula = board->first_particle;
@@ -249,20 +237,17 @@ void gameBoardDelete(GameBoard* board) {
     while (particula != NULL){
         particula2 = particula2->next;
         free(particula);
-        particula= particula2;
+        particula = particula2;
     }
 
     free(board);
 }
 
 void gameBoardAddParticle(GameBoard* board, float x, float y, int color) {
-    // TODO: Crear un ParticleNode con memoria dinámica.
-    // TODO: Inicializar x, y, velocidades aleatorias y un life_timer.
-    // TODO: Agregarlo al principio de la lista enlazada simple de partículas.
     ParticleNode* nuevo = (ParticleNode*)malloc(sizeof(ParticleNode));
     nuevo->x = x;
     nuevo->y = y;
-    nuevo->vel_x = ((rand() % 100) / 10.0f) - 5.0f;
+    nuevo->vel_x = ((rand() % 100) / 10.0f) - 5.0f; // datos de juego_base
     nuevo->vel_y = ((rand() % 50) / -10.0f) - 2.0f;
     nuevo->color = color;
     nuevo->life_timer = 30 + (rand() % 30);
@@ -286,14 +271,14 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
                 llena++;
             }
         }
-        if (llena < 10){
+        if (llena < 10){// Fila no llena
             antes = actual;
             actual = actual->next;
-        } else {
+        } else { // Fila llena
             for (int i = 0 ; i< 10; i++){
                 gameBoardAddParticle(board, OFFSET_X + i * CELL_SIZE + CELL_SIZE/2, OFFSET_Y + fila * CELL_SIZE + CELL_SIZE/2, actual->cells[i]);
-            }
-            if (actual == board->first_row) {
+            } // Llama a las particulas por cada celda
+            if (actual == board->first_row) { // Caso primera fila llena
                 RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode));
                 nuevo->next = actual->next;
                 board->first_row = nuevo;
@@ -301,7 +286,7 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
                 RowNode* aborrar = actual;
                 actual=actual->next;
                 free(aborrar);
-            } else {
+            } else { // Caso ordinario
                 antes->next = actual->next;
                 RowNode* aborrar = actual;
                 actual = actual->next; // Enlaza la fila anterior con la siguiente, eliminando la actual
@@ -323,8 +308,6 @@ void gameBoardEnqueuePiece(GameBoard* board, int type) {
     PieceQueueNode* nuevo = (PieceQueueNode*)malloc(sizeof(PieceQueueNode));
     nuevo->type = type;
     nuevo->next = NULL;
-    //(board->queue_tail)->next = nuevo;
-    //board->queue_tail = nuevo;
 
     if (board->queue_tail == NULL) {
         board->queue_head = nuevo;
