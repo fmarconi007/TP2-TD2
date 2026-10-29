@@ -278,39 +278,48 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
     // TODO: Insertar el nuevo RowNode en la CABEZA del tablero (board->first_row).
     // TODO: Por cada celda destruida, invocar a gameBoardAddParticle().
     
-    RowNode* actual = board;
+    RowNode* actual = board->first_row;
     RowNode* antes = NULL;
-    RowNode* sig = board->next;
 
     int llena = 0; // Sera 10 si esta llena
     int eliminadas = 0;
 
-    while (sig != NULL){ // Ciclo para las filas
+    while (actual != NULL){ // Ciclo para las filas
+        llena = 0;
         for (int j=0; j<GRID_COLS; j++){ // Ciclo para las cells
-            
-            if (actual->cells[j] != 0){
+            if (actual->cells[j] > 0){
                 llena++;
             }
-            else{
-                break; // Encontro un 0, no esta llena y sale del for y sigue a la siguiente fila
+        }
+        if (llena < 10){
+            antes = actual;
+            actual = actual->next;
+        } else {
+            for (int i = 0 ; i< 10; i++){
+                gameBoardAddParticle(board, j, i, colors[actual->cells[i]]);
             }
-            if (llena == 10){
-                // La fila esta llena, hay que eliminarla y crear una nueva fila vacia
-                // Generar particula QUE ES X,Y?????
-                antes->next = sig; // Enlaza la fila anterior con la siguiente, eliminando la actual
-                free(actual); // Libera la fila llena
-
-                RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode)); // Crea una fila nueva
+            if (actual == board->first_row) {
+                RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode));
+                nuevo->next = actual->next;
                 board->first_row = nuevo;
                 cellsEn0(nuevo->cells);
-
-                eliminadas++;
+                RowNode* aborrar = actual;
+                actual=actual->next;
+                free(aborrar);
+            } else {
+                antes->next = actual->next;
+                RowNode* aborrar = actual;
+                actual = actual->next; // Enlaza la fila anterior con la siguiente, eliminando la actual
+                free(aborrar); // Libera la fila llena
+                RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode)); // Crea una fila nueva
+                nuevo->next=board->first_row;
+                board->first_row = nuevo;
+                cellsEn0(nuevo->cells);
             }
+            eliminadas++;
         }
-        // Reemplazo a la siguiente fila
-        antes = actual;
-        actual = sig;
-        sig = sig->next;
+        
+
     }
     return eliminadas;
 }
