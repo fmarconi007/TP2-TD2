@@ -235,7 +235,7 @@ void gameBoardDelete(GameBoard* board) {
     // TODO: Recorrer y liberar todos los ParticleNode.
     // TODO: Finalmente, liberar la estructura GameBoard.
     
-    f (board == NULL) return; // Caso base
+    if (board == NULL) return; // Caso base
 
     RowNode* actual = board->first_row;
     RowNode* siguiente = actual;
