@@ -78,6 +78,20 @@ GameBoard* game_board = NULL;
 
 // ========= EJERCICIO 1: STRINGS (NO USAR string.h) =========
 
+int len(char* arr){
+    // calcula la longitud de un string sin incluir '\0'
+    
+    char x=arr[0];
+    int cont = 1; // Contador final para el tamano del string
+
+    while (x != '\0') {
+        x = arr[cont];
+        cont++;
+    }
+
+    return cont;
+}
+
 char* strDuplicate(char* src) {
     // TODO: Contar los caracteres de src, reservar con malloc (no olvidar el '\0'),
     //       copiar todo y devolver el puntero nuevo.
@@ -107,7 +121,6 @@ int strCompare(char* s1, char* s2) {
     if (cont1 < cont2) return 1;
 
     // Recorrer ambos mientras tengan caracteres
-    int igual = 1;
     int i = 0;
     while (s1[i] != '\0' && s2[i] != '\0'){
         if (s1[i] < s2[i]) return 1;
@@ -128,19 +141,7 @@ int strCompare(char* s1, char* s2) {
     }
 }
 
-int len(char* arr){
-    // calcula la longitud de un string sin incluir '\0'
-    
-    char x;
-    int cont = 0; // Contador final para el tamano del string
 
-    while (x != '\0') {
-        x = arr[cont];
-        cont++;
-    }
-
-    return cont;
-}
 
 char* strConcatenate(char* src1, char* src2) {
     // TODO: Reservar un string nuevo con src1 seguido de src2, y liberar src1 y src2.
@@ -175,6 +176,13 @@ char* strConcatenate(char* src1, char* src2) {
 }
 
 // ========= EJERCICIO 2: FUNCIONES A IMPLEMENTAR (EL TP) =========
+
+void cellsEn0(int cells[]){
+    // Funcion auxiliar para inicializar todas las celdas de una fila en 0
+    for (int i = 0; i < GRID_COLS; i++){
+        cells[i] = 0;
+    }
+}
 
 GameBoard* gameBoardNew() {
     int contF = 0;
@@ -221,12 +229,6 @@ GameBoard* gameBoardNew() {
     return board;
 }
 
-void cellsEn0(int cells[]){
-    // Funcion auxiliar para inicializar todas las celdas de una fila en 0
-    for (int i = 0; i < GRID_COLS; i++){
-        cells[i] = 0;
-    }
-}
 
 void gameBoardDelete(GameBoard* board) {
     // TODO: Debe tolerar board == NULL.
@@ -240,7 +242,7 @@ void gameBoardDelete(GameBoard* board) {
     RowNode* actual = board->first_row;
     RowNode* siguiente = actual;
     while (actual != NULL){
-        siguiente _= siguiente -> next;
+        siguiente = siguiente -> next;
         free (actual);
         actual = siguiente;
     }
@@ -271,8 +273,8 @@ void gameBoardAddParticle(GameBoard* board, float x, float y, int color) {
     ParticleNode* nuevo = (ParticleNode*)malloc(sizeof(ParticleNode));
     nuevo->x = x;
     nuevo->y = y;
-    nuevo->vel_x = ((rand(); % 100) / 10.0f) - 5.0f;
-    nuevo->vel_y = ((rand(); % 50) / 10.0f) - 2.0f;
+    nuevo->vel_x = ((rand() % 100) / 10.0f) - 5.0f;
+    nuevo->vel_y = ((rand() % 50) / -10.0f) - 2.0f;
     nuevo->color = color;
     nuevo->life_timer = 30 + (rand() % 30);
     nuevo->next = board->first_particle;
@@ -291,6 +293,7 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
 
     int llena = 0; // Sera 10 si esta llena
     int eliminadas = 0;
+    int fila = 20;
 
     while (actual != NULL){ // Ciclo para las filas
         llena = 0;
@@ -304,7 +307,7 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
             actual = actual->next;
         } else {
             for (int i = 0 ; i< 10; i++){
-                gameBoardAddParticle(board, j, i, actual->cells[i]);
+                gameBoardAddParticle(board, fila, i, actual->cells[i]);
             }
             if (actual == board->first_row) {
                 RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode));
@@ -327,7 +330,7 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
             eliminadas++;
         }
         
-
+        fila++;
     }
     return eliminadas;
 }
@@ -538,7 +541,7 @@ void correrTests() {
     // strConcatenate tests
     char* s1 = strDuplicate("");
     char* s2 = strDuplicate("abc");
-    free(strConcatenate(s1, s2))`; // 1
+    free(strConcatenate(s1, s2)); // 1
 
     char* s3 = strDuplicate("hola ");
     char* s4 = strDuplicate("mundo");
