@@ -282,18 +282,13 @@ void gameBoardAddParticle(GameBoard* board, float x, float y, int color) {
 }
 
 int gameBoardCheckAndClearLines(GameBoard* board) {
-    // TODO: Recorrer la lista de RowNode.
-    // TODO: Si un RowNode tiene todas sus celdas > 0, desenlazarlo y hacer free().
-    // TODO: Crear un nuevo RowNode vacío (lleno de ceros).
-    // TODO: Insertar el nuevo RowNode en la CABEZA del tablero (board->first_row).
-    // TODO: Por cada celda destruida, invocar a gameBoardAddParticle().
     
     RowNode* actual = board->first_row;
     RowNode* antes = NULL;
 
     int llena = 0; // Sera 10 si esta llena
     int eliminadas = 0;
-    int fila = 20;
+    int fila = 0;
 
     while (actual != NULL){ // Ciclo para las filas
         llena = 0;
@@ -307,7 +302,7 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
             actual = actual->next;
         } else {
             for (int i = 0 ; i< 10; i++){
-                gameBoardAddParticle(board, fila, i, actual->cells[i]);
+                gameBoardAddParticle(board, OFFSET_X + i * CELL_SIZE + CELL_SIZE/2, OFFSET_Y + fila * CELL_SIZE + CELL_SIZE/2, actual->cells[i]);
             }
             if (actual == board->first_row) {
                 RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode));
@@ -339,8 +334,17 @@ void gameBoardEnqueuePiece(GameBoard* board, int type) {
     PieceQueueNode* nuevo = (PieceQueueNode*)malloc(sizeof(PieceQueueNode));
     nuevo->type = type;
     nuevo->next = NULL;
-    (board->queue_tail)->next = nuevo;
-    board->queue_tail = nuevo;
+    //(board->queue_tail)->next = nuevo;
+    //board->queue_tail = nuevo;
+
+    if (board->queue_tail == NULL) {
+        board->queue_head = nuevo;
+        board->queue_tail = nuevo;
+    }
+    else {
+        board->queue_tail->next = nuevo;
+        board->queue_tail = nuevo;
+    }
 }
 
 int gameBoardDequeuePiece(GameBoard* board, int* out_type) {
