@@ -268,7 +268,7 @@ void gameBoardAddParticle(GameBoard* board, float x, float y, int color) {
     // TODO: Crear un ParticleNode con memoria dinámica.
     // TODO: Inicializar x, y, velocidades aleatorias y un life_timer.
     // TODO: Agregarlo al principio de la lista enlazada simple de partículas.
-    printf("Función gameBoardAddParticle no implementada.\n");
+    
 }
 
 int gameBoardCheckAndClearLines(GameBoard* board) {
