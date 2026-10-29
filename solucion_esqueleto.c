@@ -500,11 +500,6 @@ int inicializar() {
 // ========= TESTS (COMPLETAR) =========
 
 void correrTests() {
-    // TODO: Implementar los casos minimos del enunciado. Por ejemplo:
-    //  - strDuplicate: "", "x", un string con distintos caracteres.
-    //  - strCompare: "" vs "", "a" vs "a", y una desigualdad en ambos sentidos (s1/s2 y s2/s1).
-    //  - strConcatenate: "" + "abc" y "hola " + "mundo". Los argumentos deben crearse con
-    //    strDuplicate, porque strConcatenate los libera (no pasar literales).
     //  - Cola: 5 push y 6 pop; el 6to debe devolver 0 y dejar queue_head y queue_tail en NULL.
     //    Verificar tambien que un push posterior funcione.
     //  - Tablero: llenar la fila de indice 19 (la de abajo), llamar a
@@ -526,11 +521,11 @@ void correrTests() {
     // strConcatenate tests
     char* s1 = strDuplicate("");
     char* s2 = strDuplicate("abc");
-    strConcatenate(s1, s2); // 1
+    free(strConcatenate(s1, s2))`; // 1
 
     char* s3 = strDuplicate("hola ");
     char* s4 = strDuplicate("mundo");
-    strConcatenate(s3, s4); // 2 
+    free(strConcatenate(s3, s4)); // 2 
 
     // Cola tests
     
