@@ -527,7 +527,13 @@ void correrTests() {
     
     
     // Tablero tests
-    
+    GameBoard* board = gameBoardNew();
+    for (int i = 0; i < GRID_COLS; i++) {
+        RowNode* ultimo = getRowAt(board, GRID_ROWS - 1);
+        ultimo->cells[i] = 1; // llenar la fila de abajo
+    }
+    gameBoardCheckAndClearLines(board);
+    // terminar...
 }
 
 // Compara contra "--test" sin depender de string.h ni del Ejercicio 1.
