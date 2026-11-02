@@ -501,7 +501,7 @@ int inicializar() {
 
 int testsFallidos = 0;
 
-void check(int condicion, char* nombre) {
+void check(int condicion, char* nombre) { // Funcion auxiliar para imprimir el resultado de un test
     if (condicion) {
         printf("  OK     %s\n", nombre);
     } else {
@@ -575,7 +575,7 @@ void correrTests() {
     char* s2 = strDuplicate("abc");
     char* c1 = strConcatenate(s1, s2);
     check(c1 != NULL && strCompare(c1, "abc") == 0, "1. vacio + 3 caracteres");
-    free(c1);
+    free(c1); // Recordar que dentro de Concatenate se libera la memoria de los dos strins originales
     char* s3 = strDuplicate("hola ");
     char* s4 = strDuplicate("mundo");
     char* c2 = strConcatenate(s3, s4);
