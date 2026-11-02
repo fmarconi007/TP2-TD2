@@ -178,6 +178,7 @@ GameBoard* gameBoardNew() {
         return NULL;
     }
     contF++;
+    fila->next = NULL;
     cellsEn0(fila->cells); // Inicializa la primera fila en 0
     RowNode* actual = fila;
 
@@ -194,6 +195,8 @@ GameBoard* gameBoardNew() {
         } // Cada vez que se crea un nodo nuevo revisa si le asigno un espacio de memoria, sino libera todo
 
         cellsEn0(nuevo->cells);
+        nuevo->next = NULL;
+        contF++;
         actual->next = nuevo; 
         actual = nuevo;
     }
@@ -282,6 +285,7 @@ int gameBoardCheckAndClearLines(GameBoard* board) {
                 RowNode* nuevo = (RowNode*)malloc(sizeof(RowNode));
                 nuevo->next = actual->next;
                 board->first_row = nuevo;
+                antes = nuevo;
                 cellsEn0(nuevo->cells);
                 RowNode* aborrar = actual;
                 actual=actual->next;
@@ -493,47 +497,150 @@ int inicializar() {
     return 1;
 }
 
-// ========= TESTS (COMPLETAR) =========
+// ========= TESTS =========
+
+int testsFallidos = 0;
+
+void check(int condicion, char* nombre) {
+    if (condicion) {
+        printf("  OK     %s\n", nombre);
+    } else {
+        printf("  FALLO  %s\n", nombre);
+        testsFallidos++;
+    }
+}
+
+// Cuenta las filas recorriendo la lista hasta NULL
+int contarFilas(GameBoard* board) {
+    int n = 0;
+    for (RowNode* r = board->first_row; r != NULL; r = r->next) n++;
+    return n;
+}
+
+// Cuenta las particulas de la lista
+int contarParticulas(GameBoard* board) {
+    int n = 0;
+    for (ParticleNode* p = board->first_particle; p != NULL; p = p->next) n++;
+    return n;
+}
+
+// Llena todas las celdas de la fila de indice `indice` con 1
+void llenarFila(GameBoard* board, int indice) {
+    RowNode* fila = getRowAt(board, indice);
+    for (int c = 0; c < GRID_COLS; c++) fila->cells[c] = 1;
+}
+
+// Devuelve 1 si todas las celdas de la fila valen 0
+int filaVacia(RowNode* fila) {
+    for (int c = 0; c < GRID_COLS; c++) {
+        if (fila->cells[c] != 0) return 0;
+    }
+    return 1;
+}
+
+// Devuelve 1 si todas las filas del tablero estan vacias
+int tableroVacio(GameBoard* board) {
+    for (RowNode* r = board->first_row; r != NULL; r = r->next) {
+        if (!filaVacia(r)) return 0;
+    }
+    return 1;
+}
 
 void correrTests() {
-    //  - Cola: 5 push y 6 pop; el 6to debe devolver 0 y dejar queue_head y queue_tail en NULL.
-    //    Verificar tambien que un push posterior funcione.
-    //  - Tablero: llenar la fila de indice 19 (la de abajo), llamar a
-    //    gameBoardCheckAndClearLines y comprobar que first_row es la fila nueva vacia y que
-    //    la lista sigue teniendo 20 filas.
-    // Liberar toda la memoria pedida en los tests (strings y tableros).
-    
-    // strDuplicate tests
-    free(strDuplicate("")); // 1
-    free(strDuplicate("x")); // 2
-    free(strDuplicate("qwerty")); // 3
+    // ---- strDuplicate ----
+    printf("strDuplicate\n");
+    char* d1 = strDuplicate("");
+    check(d1 != NULL && strCompare(d1, "") == 0, "1. string vacio");
+    free(d1);
+    char* d2 = strDuplicate("x");
+    check(d2 != NULL && strCompare(d2, "x") == 0, "2. un caracter");
+    free(d2);
+    char* d3 = strDuplicate("qwerty");
+    check(d3 != NULL && strCompare(d3, "qwerty") == 0, "3. varios caracteres");
+    free(d3);
 
-    // strCompare tests
-    strCompare("", ""); // 1
-    strCompare("a", "a"); // 2
-    strCompare("abc", "abd"); // 3
-    strCompare("abd", "abc"); // 4
-    
-    // strConcatenate tests
+    // ---- strCompare ----
+    printf("strCompare\n");
+    check(strCompare("", "") == 0, "1. dos vacios");
+    check(strCompare("a", "a") == 0, "2. un caracter iguales");
+    check(strCompare("a", "b") == 1, "2. un caracter: a < b");
+    check(strCompare("abc", "abd") == 1, "3. abc vs abd");
+    check(strCompare("abd", "abc") == -1, "3. abd vs abc (orden inverso)");
+    check(strCompare("casa", "casas") == 1, "extra: el prefijo es menor");
+    check(strCompare("b", "abc") == -1, "extra: b > abc aunque sea mas corto");
+
+    // ---- strConcatenate ----
+    printf("strConcatenate\n");
     char* s1 = strDuplicate("");
     char* s2 = strDuplicate("abc");
-    free(strConcatenate(s1, s2)); // 1
-
+    char* c1 = strConcatenate(s1, s2);
+    check(c1 != NULL && strCompare(c1, "abc") == 0, "1. vacio + 3 caracteres");
+    free(c1);
     char* s3 = strDuplicate("hola ");
     char* s4 = strDuplicate("mundo");
-    free(strConcatenate(s3, s4)); // 2 
+    char* c2 = strConcatenate(s3, s4);
+    check(c2 != NULL && strCompare(c2, "hola mundo") == 0, "2. dos strings de 5 caracteres");
+    free(c2);
 
-    // Cola tests
-    
-    
-    // Tablero tests
-    GameBoard* board = gameBoardNew();
-    for (int i = 0; i < GRID_COLS; i++) {
-        RowNode* ultimo = getRowAt(board, GRID_ROWS - 1);
-        ultimo->cells[i] = 1; // llenar la fila de abajo
+    // ---- Cola ----
+    printf("Cola\n");
+    GameBoard* b = gameBoardNew();
+    int out = -1;
+    for (int i = 0; i < 5; i++) gameBoardEnqueuePiece(b, i);
+
+    int fifo = 1;
+    for (int i = 0; i < 5; i++) {
+        int ok = gameBoardDequeuePiece(b, &out);
+        if (!ok || out != i) fifo = 0;
     }
-    gameBoardCheckAndClearLines(board);
-    // terminar...
+    check(fifo, "5 push y 5 pop respetan el orden FIFO");
+
+    out = -1;
+    check(gameBoardDequeuePiece(b, &out) == 0, "el 6to pop devuelve 0");
+    check(out == -1, "el 6to pop no modifica out_type");
+    check(b->queue_head == NULL && b->queue_tail == NULL, "head y tail quedan en NULL");
+
+    gameBoardEnqueuePiece(b, 6);
+    check(b->queue_head != NULL && b->queue_head == b->queue_tail, "push posterior: head == tail");
+    check(gameBoardDequeuePiece(b, &out) == 1 && out == 6, "push posterior: se puede extraer");
+    check(b->queue_head == NULL && b->queue_tail == NULL, "vuelve a quedar vacia");
+    gameBoardDelete(b);
+
+    // ---- Tablero ----
+    printf("Tablero\n");
+
+    // 2. Ultima fila llena
+    b = gameBoardNew();
+    check(contarFilas(b) == 20, "tablero nuevo tiene 20 filas");
+    RowNode* primeraAntes = b->first_row;
+    llenarFila(b, GRID_ROWS - 1);
+    int borradas = gameBoardCheckAndClearLines(b);
+    check(borradas == 1, "fila 19 llena: devuelve 1");
+    check(b->first_row != primeraAntes && filaVacia(b->first_row), "fila 19 llena: first_row es una fila nueva vacia");
+    check(contarFilas(b) == 20, "fila 19 llena: sigue habiendo 20 filas");
+    check(contarParticulas(b) == GRID_COLS, "fila 19 llena: una particula por celda");
+    gameBoardDelete(b);
+
+    // 3. Filas 0 y 1 llenas
+    b = gameBoardNew();
+    llenarFila(b, 0);
+    llenarFila(b, 1);
+    borradas = gameBoardCheckAndClearLines(b);
+    check(borradas == 2, "filas 0 y 1 llenas: devuelve 2");
+    check(contarFilas(b) == 20, "filas 0 y 1 llenas: sigue habiendo 20 filas");
+    check(tableroVacio(b), "filas 0 y 1 llenas: el tablero queda vacio");
+    gameBoardDelete(b);
+
+    // Extra: una fila incompleta no se borra
+    b = gameBoardNew();
+    llenarFila(b, 19);
+    getRowAt(b, 19)->cells[4] = 0;
+    check(gameBoardCheckAndClearLines(b) == 0, "extra: fila con un hueco no se borra");
+    check(contarFilas(b) == 20, "extra: fila con un hueco: 20 filas");
+    gameBoardDelete(b);
+
+    if (testsFallidos == 0) printf("\nTodos los tests pasaron\n");
+    else printf("\n%d test(s) fallaron\n", testsFallidos);
 }
 
 // Compara contra "--test" sin depender de string.h ni del Ejercicio 1.
